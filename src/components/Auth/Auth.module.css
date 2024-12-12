@@ -1,79 +1,190 @@
-.modal {
-  width: 100%;
-  overflow: hidden;
-  cursor: pointer;
-  background-color: #232323;
-  transition: all 0.25s ease-in-out;
-}
-.titleContainer {
-  width: 100%;
-  padding: 12px 12px 0px 12px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-}
-.title {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 24px;
-  text-align: left;
-  color: #edededaa;
-}
-.text {
-  font-size: 16px;
-  line-height: 21px;
-  font-weight: 500;
-  color: #747474;
-  margin-top: 8px;
-}
-.close {
-  height: 36px;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
-}
-.close:hover {
-  background-color: #161616;
-}
 .container {
-  width: 100%;
-  height: auto;
-  padding: 16px;
-  padding-top: 0px;
-}
-.button {
-  margin-top: 32px;
-  margin-bottom: 16px;
-  height: 42px;
-  border-radius: 8px;
-  background-color: #ffffff;
   display: flex;
-  flex-direction: row;
+  width: 100%;
+  min-height: 600px;
+  flex-wrap: wrap; /* Allow wrapping for mobile view */
+}
+
+.leftSection {
+  flex: 1;
+  min-width: 300px;
+  width: 40%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.leftSection .header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.leftSection .header img {
+  width: 32px;
+  height: 32px;
+}
+
+.leftSection .header h2 {
+  color: #161616;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.leftSection h1 {
+  color: #161616;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.leftSection p {
+  color: #4a5568;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.leftSection .authButton {
+  width: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0.75rem;
+  background-color: black;
+  color: white;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
   cursor: pointer;
-  transition: all 0.25s ease-in-out;
 }
-.button:hover {
-  transform: scale(0.99);
+
+.leftSection .authButton:hover {
+  background-color: #2d3748;
 }
-.buttonText {
-  margin-left: 8px;
+
+.leftSection .authButton img {
+  margin-right: 0.75rem;
+}
+
+.leftSection .terms {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #718096;
+}
+
+.rightSection {
+  flex: 1;
+  min-width: 300px;
+  width: 60%;
+  position: relative;
+  overflow: hidden;
+  height: 600px;
+  box-sizing: border-box;
+}
+
+.imageCarousel {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+  width: 300%; 
+}
+
+.imageSlide {
+  width: calc(100% / 3); 
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.imageSlide > div {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.imageOverlay {
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  right: 50px;
+  color: white;
+  max-width: calc(100% - 100px);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 10;
+}
+
+.imageOverlay h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.imageOverlay p {
   font-size: 16px;
-  line-height: 18px;
-  letter-spacing: -0.008em;
-  font-weight: 500;
-  color: #151515;
 }
-.spinner {
-  width: 24px;
-  height: 24px;
+
+.dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.activeDot {
+  background-color: white;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftSection,
+  .rightSection {
+    width: 100%;
+    min-height: auto;
+    height: auto;
+  }
+
+  .rightSection {
+    height: 400px;
+  }
+
+  .imageOverlay {
+    left: 20px;
+    right: 20px;
+    max-width: calc(100% - 40px);
+    bottom: 30px;
+  }
+
+  .dots {
+    bottom: 10px;
+  }
 }

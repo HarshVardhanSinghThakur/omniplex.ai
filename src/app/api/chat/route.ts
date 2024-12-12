@@ -1,8 +1,8 @@
-import OpenAI from "openai";
-import { OpenAIStream, StreamingTextResponse } from "ai";
+import Groq from "groq-sdk";
+import { StreamingTextResponse } from "ai"; // Assuming this can handle your response correctly
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 export const runtime = "edge";
@@ -10,7 +10,7 @@ export const runtime = "edge";
 export async function POST(req: Request) {
   const {
     messages,
-    model,
+    model = "llama3-8b-8192",  // Default model if not provided
     temperature,
     max_tokens,
     top_p,
@@ -18,17 +18,43 @@ export async function POST(req: Request) {
     presence_penalty,
   } = await req.json();
 
-  const response = await openai.chat.completions.create({
-    stream: true,
-    model: model,
-    temperature: temperature,
-    max_tokens: max_tokens,
-    top_p: top_p,
-    frequency_penalty: frequency_penalty,
-    presence_penalty: presence_penalty,
-    messages: messages,
-  });
+  try {
+    const response = await groq.chat.completions.create({
+      model: model,  // Ensure this model name is available in Groq
+      temperature: temperature,
+      max_tokens: max_tokens,
+      top_p: top_p,
+      frequency_penalty: frequency_penalty,
+      presence_penalty: presence_penalty,
+      messages: messages,
+    });
 
-  const stream = OpenAIStream(response);
-  return new StreamingTextResponse(stream);
+    // Assuming the response is a single completion, we can directly access the content.
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          // Extracting the content from the response
+          const text = response.choices[0]?.message?.content || '';
+          console.log("Received response text:", text);
+
+          // Enqueueing the text into the stream
+          controller.enqueue(new TextEncoder().encode(text));
+          controller.close();  // Close the stream after the content is enqueued
+        } catch (error) {
+          console.error("Error during streaming:", error);
+          controller.error(error);  // Propagate the error if it occurs
+        }
+      },
+    });
+
+    // Returning the stream wrapped in a StreamingTextResponse
+    return new StreamingTextResponse(stream);
+
+  } catch (error) {
+    console.error("Error during Groq API call:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to process the input", details: error }),
+      { status: 500 }
+    );
+  }
 }

@@ -44,21 +44,33 @@ export const focusOptions = [
   },
 ];
 
+// export const MODELS = [
+//   { label: "gpt-4o", value: "gpt-4o" },
+//   { label: "gpt-4-turbo-2024-04-09", value: "gpt-4-turbo-2024-04-09" },
+//   { label: "gpt-4-turbo-preview", value: "gpt-4-turbo-preview" },
+//   { label: "gpt-4-1106-review", value: "gpt-4-1106-review" },
+//   { label: "gpt-4-0613", value: "gpt-4-0613" },
+//   { label: "gpt-4-0125-preview", value: "gpt-4-0125-preview" },
+//   { label: "gpt-4", value: "gpt-4" },
+//   { label: "gpt-3.5-turbo-16k-0613", value: "gpt-3.5-turbo-16k-0613" },
+//   { label: "gpt-3.5-turbo-16k", value: "gpt-3.5-turbo-16k" },
+//   { label: "gpt-3.5-turbo-1106", value: "gpt-3.5-turbo-1106" },
+//   { label: "gpt-3.5-turbo-0613", value: "gpt-3.5-turbo-0613" },
+//   { label: "gpt-3.5-turbo-0301", value: "gpt-3.5-turbo-0301" },
+//   { label: "gpt-3.5-turbo-0125", value: "gpt-3.5-turbo-0125" },
+//   { label: "gpt-3.5-turbo", value: "gpt-3.5-turbo" },
+// ];
+
 export const MODELS = [
-  { label: "gpt-4o", value: "gpt-4o" },
-  { label: "gpt-4-turbo-2024-04-09", value: "gpt-4-turbo-2024-04-09" },
-  { label: "gpt-4-turbo-preview", value: "gpt-4-turbo-preview" },
-  { label: "gpt-4-1106-review", value: "gpt-4-1106-review" },
-  { label: "gpt-4-0613", value: "gpt-4-0613" },
-  { label: "gpt-4-0125-preview", value: "gpt-4-0125-preview" },
-  { label: "gpt-4", value: "gpt-4" },
-  { label: "gpt-3.5-turbo-16k-0613", value: "gpt-3.5-turbo-16k-0613" },
-  { label: "gpt-3.5-turbo-16k", value: "gpt-3.5-turbo-16k" },
-  { label: "gpt-3.5-turbo-1106", value: "gpt-3.5-turbo-1106" },
-  { label: "gpt-3.5-turbo-0613", value: "gpt-3.5-turbo-0613" },
-  { label: "gpt-3.5-turbo-0301", value: "gpt-3.5-turbo-0301" },
-  { label: "gpt-3.5-turbo-0125", value: "gpt-3.5-turbo-0125" },
-  { label: "gpt-3.5-turbo", value: "gpt-3.5-turbo" },
+  { label: "gemma2-9b-it", value: "gemma2-9b-it", provider: "Google", contextSize: 8192 },
+  { label: "gemma-7b-it", value: "gemma-7b-it", provider: "Google", contextSize: 8192 },
+  { label: "llama-3.3-70b-versatile", value: "llama-3.3-70b-versatile", provider: "Meta", contextSize: 128000, seqLength: 32768 },
+  { label: "llama-3.1-70b-versatile (DEPRECATED)", value: "llama-3.1-70b-versatile (DEPRECATED)", provider: "Meta", contextSize: 128000, seqLength: 32768 },
+  { label: "llama-3.1-8b-instant", value: "llama-3.1-8b-instant", provider: "Meta", contextSize: 128000, seqLength: 8192 },
+  { label: "llama-guard-3-8b", value: "llama-guard-3-8b", provider: "Meta", contextSize: 8192 },
+  { label: "llama3-70b-8192", value: "llama3-70b-8192", provider: "Meta", contextSize: 8192 },
+  { label: "llama3-8b-8192", value: "llama3-8b-8192", provider: "Meta", contextSize: 8192 },
+  { label: "mixtral-8x7b-32768", value: "mixtral-8x7b-32768" }
 ];
 
 export const PLUGINS = [
@@ -76,11 +88,20 @@ export const PLUGINS = [
     url: "/plugins/weather",
     description: "Weather forecast",
   },
+  
   {
     tag: "Built In",
     name: "Dictionary",
-    comingSoon: false,
+    comingSoon: true,
     url: "/plugins/dictionary",
     description: "Look up word definitions",
   },
+{
+  tag: "Built In",
+  name: "Scam Predictor",
+  comingSoon: true,
+  url: "/plugins/scamPredictor",
+  description: "Look up for website scam detection.",
+
+},  
 ];

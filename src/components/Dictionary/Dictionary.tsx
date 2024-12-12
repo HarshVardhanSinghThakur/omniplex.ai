@@ -7,7 +7,7 @@ import { Skeleton } from "@nextui-org/skeleton";
 import AudioLottie from "../../../public/lottie/Audio.json";
 
 type DictionaryProps = {
-  dictionaryResults?: DictionaryType;
+  dictionaryResults?: DictionaryType | null;
 };
 
 const Dictionary = ({ dictionaryResults }: DictionaryProps) => {

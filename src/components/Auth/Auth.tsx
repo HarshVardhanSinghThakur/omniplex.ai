@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import styles from "./Auth.module.css";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Modal, ModalContent } from "@nextui-org/modal";
-import { useDispatch } from "react-redux";
-import { setAuthState, setUserDetailsState } from "@/store/authSlice";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../../firebaseConfig";
-import Spinner from "../Spinner/Spinner";
+import React, { useState, useEffect } from 'react';
+import { Modal, ModalContent } from '@nextui-org/react';
+import { X } from 'lucide-react'; // Import X icon for close button
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import Image from 'next/image';
+import { setAuthState, setUserDetailsState } from '@/store/authSlice';
+import { db } from '../../../firebaseConfig';
+import Spinner from '../Spinner/Spinner';
+
+import styles from './Auth.module.css';
 
 type Props = {
   isOpen: boolean;
@@ -16,9 +17,35 @@ type Props = {
 };
 
 const Auth = (props: Props) => {
-  const router = useRouter();
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const dispatch = useDispatch();
+
+  const authImages = [
+    {
+      src: '/Github.png',
+      title: 'Intelligent Collaboration',
+      description: 'Experience seamless interaction with advanced AI that understands context and nuance.'
+    },
+    {
+      src: '/images/Github.png',
+      title: 'Comprehensive Problem Solving',
+      description: 'From complex analysis to creative brainstorming, get intelligent support across domains.'
+    },
+    {
+      src: '/images/personalized-assistance.jpg',
+      title: 'Personalized Assistance',
+      description: 'Tailored responses that adapt to your unique needs and communication style.'
+    }
+  ];
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % authImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleAuth = async () => {
     setLoading(true);
@@ -28,7 +55,7 @@ const Auth = (props: Props) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      const userRef = doc(db, "users", user.uid);
+      const userRef = doc(db, 'users', user.uid);
       const userDoc = await getDoc(userRef);
 
       if (userDoc.exists()) {
@@ -58,71 +85,110 @@ const Auth = (props: Props) => {
       dispatch(
         setUserDetailsState({
           uid: user.uid,
-          name: user.displayName ?? "",
-          email: user.email ?? "",
-          profilePic: user.photoURL ?? "",
+          name: user.displayName ?? '',
+          email: user.email ?? '',
+          profilePic: user.photoURL ?? '',
         })
       );
       props.onClose();
       setLoading(false);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
       setLoading(false);
     }
   };
 
   return (
     <Modal
-      size={"lg"}
-      radius="md"
-      shadow="sm"
-      backdrop={"blur"}
+      size="5xl"
       isOpen={props.isOpen}
       onClose={props.onClose}
-      placement="bottom-center"
-      closeButton={<div></div>}
+      placement="center"
+      backdrop="blur"
+      radius="lg"
+      classNames={{
+        base: 'bg-transparent',
+        wrapper: 'overflow-hidden',
+      }}
     >
-      <ModalContent>
+      <ModalContent className="p-0 overflow-hidden">
         {(onClose) => (
-          <div className={styles.modal}>
-            <div className={styles.titleContainer}>
-              <div className={styles.title}></div>
-              <div
-                className={styles.close}
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                <Image
-                  width={20}
-                  height={20}
-                  src={"/svgs/CrossWhite.svg"}
-                  alt={"X"}
-                />
+          <div className={styles.container}>
+            {/* Left Section - Login */}
+            <div className={styles.leftSection}>
+              <div className={styles.closeButtonContainer}>
+                <button
+                  onClick={props.onClose}
+                  className={styles.closeButton}
+                >
+                  <X size={24} />
+                </button>
               </div>
-            </div>
-            <div className={styles.container}>
-              <div className={styles.title}>Welcome</div>
-              <p className={styles.text}>Let&apos;s Create Your Account</p>
+
+              <div className={styles.header}>
+                <Image width={32} height={32} src="/LogoB.png" alt="OmniPlex" />
+                <h2>OmniPlex</h2>
+              </div>
+
+              <h1>Where <br />Knowledge Evolves</h1>
+
+              <p>Sign in to unlock powerful AI capabilities</p>
 
               {loading ? (
-                <div className={styles.button}>
-                  <div className={styles.spinner}>
-                    <Spinner />
-                  </div>
-                  <div className={styles.buttonText}>Signing in</div>
+                <div className={`${styles.authButton} flex items-center justify-center`}>
+                  <Spinner />
+                  <span className="ml-3">Signing in...</span>
                 </div>
               ) : (
-                <div className={styles.button} onClick={handleAuth}>
-                  <Image
-                    src={"/svgs/Google.svg"}
-                    alt={"Google"}
-                    width={24}
-                    height={24}
-                  />
-                  <div className={styles.buttonText}>Continue with Google</div>
-                </div>
+                <button
+                  onClick={handleAuth}
+                  className={styles.authButton}
+                >
+                  <Image src="/svgs/Google.svg" alt="Google" width={24} height={24} className="mr-3" />
+                  Continue with Google
+                </button>
               )}
+
+              <div className={styles.terms}>
+                <p>By signing in, you agree to our Terms of Service</p>
+              </div>
+            </div>
+
+            {/* Right Section - Scrolling Images */}
+            <div className={styles.rightSection}>
+              <div
+                className={styles.imageCarousel}
+                style={{
+                  transform: `translateX(-${currentImageIndex * (100 / authImages.length)}%)`,
+                }}
+              >
+                {authImages.map((image, index) => (
+                  <div key={index} className={styles.imageSlide}>
+                    <div
+                      className={styles.carouselImage}
+                      style={{
+                        backgroundImage: `url(${image.src})`,
+                      }}
+                    >
+                      <div className={styles.imageOverlay}>
+                        <h2>{image.title}</h2>
+                        <p>{image.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Image Navigation Dots */}
+              <div className={styles.dots}>
+                {authImages.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={index === currentImageIndex ? styles.activeDot : styles.dot}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         )}

@@ -1,8 +1,8 @@
-import OpenAI from "openai";
+import Groq from "groq-sdk";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export async function POST(req: Request) {
+export async function POST(req:Request) {
   if (req.method !== "POST") {
     return new Response(
       JSON.stringify({
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   const messages = await req.json();
 
-  const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
+  const tools = [
     {
       type: "function",
       function: {
@@ -86,15 +86,13 @@ export async function POST(req: Request) {
   ];
 
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo-0125",
+    const response = await groq.chat.completions.create({
       messages: messages,
-      tools,
-      tool_choice: "auto",
+      model: "llama3-70b-8192",
     });
 
     // Check if tool_calls are present in the response
-    const toolCalls = response.choices[0].message?.tool_calls;
+    const toolCalls = response.choices[0]?.message?.tool_calls;
     if (!toolCalls) {
       return new Response(JSON.stringify({ mode: "chat", arg: "" }), {
         status: 200,
@@ -116,7 +114,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error calling OpenAI:", error);
+    console.error("Error calling Groq API:", error);
     return new Response(
       JSON.stringify({ error: "Failed to process the input" }),
       { status: 500 }
