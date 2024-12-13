@@ -29,20 +29,18 @@ export async function POST(req: Request) {
       messages: messages,
     });
 
-    // Assuming the response is a single completion, we can directly access the content.
+    
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          // Extracting the content from the response
+          
           const text = response.choices[0]?.message?.content || '';
-          console.log("Received response text:", text);
-
-          // Enqueueing the text into the stream
+     
           controller.enqueue(new TextEncoder().encode(text));
-          controller.close();  // Close the stream after the content is enqueued
+          controller.close();  
         } catch (error) {
           console.error("Error during streaming:", error);
-          controller.error(error);  // Propagate the error if it occurs
+          controller.error(error); 
         }
       },
     });
