@@ -63,117 +63,117 @@ const Chat = (props: Props) => {
   });
 
   // Production Code
-  // const [lastProcessedIndex, setLastProcessedIndex] = useState<number | null>(
-  //   null
-  // );
+  const [lastProcessedIndex, setLastProcessedIndex] = useState<number | null>(
+    null
+  );
 
-  // useEffect(() => {
-  //   const processChatThread = async () => {
-  //     if (!chatThread || chatThread.chats.length === 0) return;
-  //     const lastChatIndex = chatThread.chats.length - 1;
-  //     const lastChat = chatThread.chats[lastChatIndex];
+  useEffect(() => {
+    const processChatThread = async () => {
+      if (!chatThread || chatThread.chats.length === 0) return;
+      const lastChatIndex = chatThread.chats.length - 1;
+      const lastChat = chatThread.chats[lastChatIndex];
 
-  //     if (lastProcessedIndex === lastChatIndex) return;
-  //     if (!lastChat.mode) {
-  //       try {
-  //         const { mode, arg } = await handleMode(lastChat.question);
-  //         let parsedArg;
-  //         try {
-  //           parsedArg = arg ? JSON.parse(arg) : {};
-  //         } catch (parseError) {
-  //           console.error("Damn determining mode and arguments:", error);
-  //         }
+      if (lastProcessedIndex === lastChatIndex) return;
+      if (!lastChat.mode) {
+        try {
+          const { mode, arg } = await handleMode(lastChat.question);
+          let parsedArg;
+          try {
+            parsedArg = arg ? JSON.parse(arg) : {};
+          } catch (parseError) {
+            console.error("Damn determining mode and arguments:", error);
+          }
 
-  //         dispatch(
-  //           updateMode({
-  //             threadId: id,
-  //             chatIndex: lastChatIndex,
-  //             mode: mode,
-  //             arg: parsedArg,
-  //           })
-  //         );
-  //       } catch (error) {
-  //         setError("Error determining mode and arguments");
-  //         setErrorFunction(() => handleMode.bind(null, lastChat.question));
-  //       }
-  //       return;
-  //     }
+          dispatch(
+            updateMode({
+              threadId: id,
+              chatIndex: lastChatIndex,
+              mode: mode,
+              arg: parsedArg,
+            })
+          );
+        } catch (error) {
+          setError("Error determining mode and arguments");
+          setErrorFunction(() => handleMode.bind(null, lastChat.question));
+        }
+        return;
+      }
 
-  //     if (lastChat.mode === "weather" && !lastChat.weatherResults) {
-  //       try {
-  //         console.log("lastChat.arg.location", lastChat.arg.location);
-  //         await handleWeather(lastChat.arg.location, lastChatIndex);
-  //       } catch (error) {
-  //         setError("Error fetching or processing search results");
-  //         setErrorFunction(() =>
-  //           handleWeather.bind(null, lastChat.arg.location, lastChatIndex)
-  //         );
-  //         return;
-  //       }
-  //     }
+      if (lastChat.mode === "weather" && !lastChat.weatherResults) {
+        try {
+          console.log("lastChat.arg.location", lastChat.arg.location);
+          await handleWeather(lastChat.arg.location, lastChatIndex);
+        } catch (error) {
+          setError("Error fetching or processing search results");
+          setErrorFunction(() =>
+            handleWeather.bind(null, lastChat.arg.location, lastChatIndex)
+          );
+          return;
+        }
+      }
 
-  //     if (lastChat.mode === "stock" && !lastChat.stocksResults) {
-  //       try {
-  //         console.log("lastChat.arg.symbol", lastChat.arg.symbol);
-  //         await handleStock(lastChat.arg.symbol, lastChatIndex);
-  //       } catch (error) {
-  //         setError("Error fetching or processing search results");
-  //         setErrorFunction(() =>
-  //           handleStock.bind(null, lastChat.arg.symbol, lastChatIndex)
-  //         );
-  //         return;
-  //       }
-  //     }
+      if (lastChat.mode === "stock" && !lastChat.stocksResults) {
+        try {
+          console.log("lastChat.arg.symbol", lastChat.arg.symbol);
+          await handleStock(lastChat.arg.symbol, lastChatIndex);
+        } catch (error) {
+          setError("Error fetching or processing search results");
+          setErrorFunction(() =>
+            handleStock.bind(null, lastChat.arg.symbol, lastChatIndex)
+          );
+          return;
+        }
+      }
 
-  //     if (lastChat.mode === "dictionary" && !lastChat.dictionaryResults) {
-  //       try {
-  //         console.log("lastChat.arg.word", lastChat.arg.symbol);
-  //         await handleDictionary(lastChat.arg.word, lastChatIndex);
-  //       } catch (error) {
-  //         setError("Error fetching or processing dictionary results");
-  //         setErrorFunction(() =>
-  //           handleDictionary.bind(null, lastChat.arg.word, lastChatIndex)
-  //         );
-  //         return;
-  //       }
-  //     }
+      if (lastChat.mode === "dictionary" && !lastChat.dictionaryResults) {
+        try {
+          console.log("lastChat.arg.word", lastChat.arg.symbol);
+          await handleDictionary(lastChat.arg.word, lastChatIndex);
+        } catch (error) {
+          setError("Error fetching or processing dictionary results");
+          setErrorFunction(() =>
+            handleDictionary.bind(null, lastChat.arg.word, lastChatIndex)
+          );
+          return;
+        }
+      }
 
-  //     if (lastChat.mode === "search" && !lastChat.searchResults) {
-  //       try {
-  //         await handleSearch(lastChatIndex);
-  //       } catch (error) {
-  //         setError("Error fetching or processing search results");
-  //         setErrorFunction(() => handleSearch.bind(null, lastChatIndex));
-  //         return;
-  //       }
-  //     }
+      if (lastChat.mode === "search" && !lastChat.searchResults) {
+        try {
+          await handleSearch(lastChatIndex);
+        } catch (error) {
+          setError("Error fetching or processing search results");
+          setErrorFunction(() => handleSearch.bind(null, lastChatIndex));
+          return;
+        }
+      }
 
-  //     if (
-  //       (lastChat.mode === "chat" || lastChat.mode === "image") &&
-  //       !lastChat.answer
-  //     ) {
-  //       try {
-  //         await handleAnswer(lastChat);
-  //       } catch (error) {
-  //         console.error("Error generating answer:", error);
-  //       }
-  //     } else if (lastChat.answer) {
-  //       setIsLoading(false);
-  //       setIsCompleted(true);
-  //     }
+      if (
+        (lastChat.mode === "chat" || lastChat.mode === "image") &&
+        !lastChat.answer
+      ) {
+        try {
+          await handleAnswer(lastChat);
+        } catch (error) {
+          console.error("Error generating answer:", error);
+        }
+      } else if (lastChat.answer) {
+        setIsLoading(false);
+        setIsCompleted(true);
+      }
 
-  //     setLastProcessedIndex(lastChatIndex);
-  //   };
+      setLastProcessedIndex(lastChatIndex);
+    };
 
-  //   processChatThread();
-  // }, [
-  //   chatThread?.chats.length,
-  //   chatThread?.chats[chatThread?.chats.length - 1]?.mode,
-  //   chatThread?.chats[chatThread?.chats.length - 1]?.searchResults,
-  //   chatThread?.chats[chatThread?.chats.length - 1]?.answer,
-  // ]);
+    processChatThread();
+  }, [
+    chatThread?.chats.length,
+    chatThread?.chats[chatThread?.chats.length - 1]?.mode,
+    chatThread?.chats[chatThread?.chats.length - 1]?.searchResults,
+    chatThread?.chats[chatThread?.chats.length - 1]?.answer,
+  ]);
 
-  // Development Code
+  //Development Code
   const lastProcessedChatRef = useRef<number>(0);
   const chatIdCounterRef = useRef<number>(0);
 
