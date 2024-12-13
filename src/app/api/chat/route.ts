@@ -1,5 +1,5 @@
 import Groq from "groq-sdk";
-import { StreamingTextResponse } from "ai"; // Assuming this can handle your response correctly
+import { StreamingTextResponse } from "ai"; 
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
@@ -10,7 +10,7 @@ export const runtime = "edge";
 export async function POST(req: Request) {
   const {
     messages,
-    model = "llama3-8b-8192",  // Default model if not provided
+    model = "llama3-8b-8192",  
     temperature,
     max_tokens,
     top_p,
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   try {
     const response = await groq.chat.completions.create({
-      model: model,  // Ensure this model name is available in Groq
+      model: model, 
       temperature: temperature,
       max_tokens: max_tokens,
       top_p: top_p,
