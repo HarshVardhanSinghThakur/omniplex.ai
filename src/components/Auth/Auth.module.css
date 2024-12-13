@@ -124,12 +124,12 @@
 }
 
 .imageOverlay h2 {
-  font-size: 22px;
-  margin-bottom: 8px;
+  font-size: 20px;
+  margin-bottom: 6px;
 }
 
 .imageOverlay p {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .dots {
@@ -185,6 +185,6 @@
   }
 
   .dots {
-    bottom: 10px;
+    bottom: 4px;
   }
 }

@@ -23,19 +23,19 @@ const Auth = (props: Props) => {
 
   const authImages = [
     {
-      src: '/Github.png',
+      src: '/phone.jpg',
       title: 'Intelligent Collaboration',
-      description: 'Experience seamless interaction with advanced AI that understands context and nuance.'
+      description: 'Experience seamless interaction with advanced AI.'
     },
     {
       src: '/images/Github.png',
-      title: 'Comprehensive Problem Solving',
+      title: 'Multipurpose AI',
       description: 'From complex analysis to creative brainstorming, get intelligent support across domains.'
     },
     {
       src: '/images/personalized-assistance.jpg',
-      title: 'Personalized Assistance',
-      description: 'Tailored responses that adapt to your unique needs and communication style.'
+      title: 'Helpful Assistance',
+      description: 'Tailored responses and ready to complete multiple tasks.'
     }
   ];
 
@@ -116,14 +116,7 @@ const Auth = (props: Props) => {
           <div className={styles.container}>
             {/* Left Section - Login */}
             <div className={styles.leftSection}>
-              <div className={styles.closeButtonContainer}>
-                <button
-                  onClick={props.onClose}
-                  className={styles.closeButton}
-                >
-                  <X size={24} />
-                </button>
-              </div>
+              
 
               <div className={styles.header}>
                 <Image width={32} height={32} src="/LogoB.png" alt="OmniPlex" />
