@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-  //output:"export",
+  webpack: (config) => {
+    config.resolve.extensions.push('.tsx', '.ts');
+    return config;
+  },
   images: {
     remotePatterns: [
       {
