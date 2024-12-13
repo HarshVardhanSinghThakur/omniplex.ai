@@ -1,24 +1,30 @@
 "use client";
-import React, { useState } from "react";
-import { DictionaryType } from "@/utils/types"; // Ensure you have this type defined
-import Dictionary from "@/components/Dictionary/Dictionary";
-import { Skeleton } from "@nextui-org/skeleton";
-import styles from "./DictionaryPage.module.css"; // Make sure your styles are defined properly
+import React, { useState, useEffect } from "react";
+import dynamic from 'next/dynamic';
+import { DictionaryType } from "@/utils/types";
+import styles from "./DictionaryPage.module.css";
+
+// Dynamically import components to ensure they're only loaded client-side
+const Dictionary = dynamic(() => import("@/components/Dictionary/Dictionary"), { ssr: false });
+const Skeleton = dynamic(() => import("@nextui-org/skeleton").then(mod => mod.Skeleton), { ssr: false });
 
 const DictionaryPage = () => {
-  const [word, setWord] = useState<string>(""); // User input for the word
+  const [isClient, setIsClient] = useState(false);
+  const [word, setWord] = useState<string>(""); 
   const [dictionaryResults, setDictionaryResults] = useState<DictionaryType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Handle user input change
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWord(e.target.value);
   };
 
-  // Handle the search request when user presses enter or clicks search button
   const handleSearch = async () => {
-    if (!word) return; // Don't search if the input is empty
+    if (!word) return;
 
     setLoading(true);
     setError(null);
@@ -37,13 +43,15 @@ const DictionaryPage = () => {
         throw new Error(data.error);
       }
 
-      setDictionaryResults(data); // Store the fetched results
+      setDictionaryResults(data);
     } catch (error: any) {
-      setError(error.message); // Display error message if something goes wrong
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (!isClient) return null;
 
   return (
     <div className={styles.pageContainer}>

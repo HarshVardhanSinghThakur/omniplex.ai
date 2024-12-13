@@ -20,32 +20,34 @@ export async function POST(req: Request) {
 
   try {
     const response = await groq.chat.completions.create({
-      model: model,  // Ensure this model name is available in Groq
+      model: model,  
       temperature: temperature,
       max_tokens: max_tokens,
       top_p: top_p,
       frequency_penalty: frequency_penalty,
       presence_penalty: presence_penalty,
       messages: messages,
+      stream: true, // Enable streaming
     });
 
-    
     const stream = new ReadableStream({
       async start(controller) {
         try {
-          
-          const text = response.choices[0]?.message?.content || '';
-     
-          controller.enqueue(new TextEncoder().encode(text));
-          controller.close();  
+          for await (const chunk of response) {
+            if (chunk.choices[0]?.delta?.content) {
+              controller.enqueue(
+                new TextEncoder().encode(chunk.choices[0].delta.content)
+              );
+            }
+          }
+          controller.close();
         } catch (error) {
           console.error("Error during streaming:", error);
-          controller.error(error); 
+          controller.error(error);
         }
       },
     });
 
-    // Returning the stream wrapped in a StreamingTextResponse
     return new StreamingTextResponse(stream);
 
   } catch (error) {
