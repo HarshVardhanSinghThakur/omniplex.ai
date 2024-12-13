@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalContent } from '@nextui-org/react';
-import { X } from 'lucide-react'; // Import X icon for close button
+import { X } from 'lucide-react'; 
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useDispatch } from 'react-redux';
