@@ -5,7 +5,7 @@ import styles from "./Sidebar.module.css";
 import Image from "next/image";
 import History from "../History/History";
 import Library from "../Library/Library";
-import Plugins from "../plugins/Plugins";
+import Plugins from "../plugins/Plugins"
 import Profile from "../Profile/Profile";
 import Settings from "../Settings/Settings";
 import Auth from "../Auth/Auth";
