@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   try {
     const response = await groq.chat.completions.create({
-      model: model,  // Ensure this model name is available in Groq
+      model: model, 
       temperature: temperature,
       max_tokens: max_tokens,
       top_p: top_p,
