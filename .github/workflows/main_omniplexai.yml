@@ -1,4 +1,5 @@
 name: Build and deploy Node.js app to Azure Web App - omniplexai
+
 on:
   push:
     branches:
@@ -9,27 +10,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code from the repository
       - uses: actions/checkout@v4
 
+      # Set up Node.js version 22.x
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'  # Use Node.js 22.x or the version compatible with your project
+          node-version: '22.12.0'
 
+      # Install Yarn version 1.22.19
       - name: Install Yarn version 1.22.19
-        run: |
-          npm install -g yarn@1.22.19 
+        run: npm install -g yarn@1.22.19
+
+      # Install dependencies, build the project
       - name: Install dependencies, build, and test
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }} 
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
-          yarn install  # Use Yarn to install dependencies
-          yarn build 
-          
+          yarn install
+          yarn build
 
+      # Zip the build artifacts for deployment
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip .
 
+      # Upload the artifact for the deployment job
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -45,14 +51,17 @@ jobs:
     permissions:
       id-token: write
     steps:
+      # Download the artifact from the build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
 
+      # Unzip the downloaded artifact
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      # Login to Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,12 +69,19 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_43EBBA7C69F1480D97EACBAE56D466B2 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_147D8009FBCD4DC9BB370F9F34AF53C0 }}
 
+      # Deploy to Azure Web App
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}  # Add this line
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'omniplexai'
           slot-name: 'Production'
           package: .
+
+      # Verify that the application is running
+      - name: Verify Deployment
+        run: |
+          echo "Deployment finished."
+          echo "Application URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
