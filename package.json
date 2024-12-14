@@ -72,5 +72,6 @@
     "yarn": "1.22.19",
     "node": "22.12.0" 
       
-  }
+  },
+  "engineStrict": true
 }
